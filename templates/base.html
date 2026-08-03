@@ -58,7 +58,7 @@
               <li class="nav-item">
                 <a
                   class="nav-link"
-                  href="/users/"
+                  href="{% url 'users_index' %}"
                 >
                   Пользователи
                 </a>
@@ -66,23 +66,46 @@
             </ul>
 
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="/login/"
-                >
-                  Вход
-                </a>
-              </li>
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <form
+                    method="post"
+                    action="{% url 'logout' %}"
+                    class="d-inline"
+                  >
+                    {% csrf_token %}
 
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="/users/create/"
-                >
-                  Регистрация
-                </a>
-              </li>
+                    <button
+                      type="submit"
+                      class="
+                        nav-link
+                        border-0
+                        bg-transparent
+                      "
+                    >
+                      Выход
+                    </button>
+                  </form>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="{% url 'login' %}"
+                  >
+                    Вход
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a
+                    class="nav-link"
+                    href="{% url 'user_create' %}"
+                  >
+                    Регистрация
+                  </a>
+                </li>
+              {% endif %}
             </ul>
           </div>
         </div>

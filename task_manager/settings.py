@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_bootstrap5",
+    "users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,9 @@ SECURE_PROXY_SSL_HEADER = (
     "HTTP_X_FORWARDED_PROTO",
     "https",
 )
+
+LOGIN_URL = "login"
+
+LOGIN_REDIRECT_URL = "index"
+
+LOGOUT_REDIRECT_URL = "index"
