@@ -11,6 +11,7 @@ from django.contrib.auth.views import (
 from django.contrib.messages.views import (
     SuccessMessageMixin,
 )
+from django.db.models.deletion import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -37,6 +38,9 @@ class UserPermissionMixin(
         return self.request.user.pk == edited_user.pk
 
     def handle_no_permission(self):
+        if not self.request.user.is_authenticated:
+            return super().handle_no_permission()
+
         messages.error(
             self.request,
             "У вас нет прав для изменения",
@@ -87,12 +91,25 @@ class UserDeleteView(
     success_url = reverse_lazy("users_index")
 
     def form_valid(self, form):
+        try:
+            response = super().form_valid(form)
+        except ProtectedError:
+            messages.error(
+                self.request,
+                (
+                    "Невозможно удалить пользователя, "
+                    "потому что он используется"
+                ),
+            )
+
+            return redirect("users_index")
+
         messages.success(
             self.request,
             "Пользователь успешно удален",
         )
 
-        return super().form_valid(form)
+        return response
 
 class UserLoginView(
     SuccessMessageMixin,
