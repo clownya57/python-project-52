@@ -18,6 +18,10 @@ urlpatterns = [
         include("users.urls"),
     ),
     path(
+        "statuses/",
+        include("statuses.urls"),
+    ),
+    path(
         "login/",
         UserLoginView.as_view(),
         name="login",
