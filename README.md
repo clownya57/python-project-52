@@ -1,2 +1,4 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/clownya57/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/clownya57/python-project-52/actions)
+### Демонстрация
+[Открыть приложение](https://python-project-52-3wyo.onrender.com/)
