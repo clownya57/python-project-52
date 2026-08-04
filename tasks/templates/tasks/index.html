@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
 
 {% block title %}
   Задачи
@@ -18,17 +19,70 @@
     </a>
   </div>
 
+  <div class="card mb-4">
+    <div class="card-body">
+      <form method="get">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4">
+            {% bootstrap_field filter.form.status %}
+          </div>
+
+          <div class="col-md-4">
+            {% bootstrap_field filter.form.executor %}
+          </div>
+
+          <div class="col-md-4">
+            {% bootstrap_field filter.form.labels %}
+          </div>
+
+          <div class="col-12">
+            {% bootstrap_field filter.form.self_tasks %}
+          </div>
+
+          <div class="col-12">
+            <button
+              type="submit"
+              class="btn btn-primary"
+            >
+              Показать
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div class="table-responsive">
     <table class="table table-striped align-middle">
       <thead>
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Имя</th>
-          <th scope="col">Статус</th>
-          <th scope="col">Автор</th>
-          <th scope="col">Исполнитель</th>
-          <th scope="col">Дата создания</th>
-          <th scope="col">Действия</th>
+          <th scope="col">
+            ID
+          </th>
+
+          <th scope="col">
+            Имя
+          </th>
+
+          <th scope="col">
+            Статус
+          </th>
+
+          <th scope="col">
+            Автор
+          </th>
+
+          <th scope="col">
+            Исполнитель
+          </th>
+
+          <th scope="col">
+            Дата создания
+          </th>
+
+          <th scope="col">
+            Действия
+          </th>
         </tr>
       </thead>
 

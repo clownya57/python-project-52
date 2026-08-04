@@ -6,16 +6,15 @@ from django.contrib.auth.mixins import (
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import (
-    DetailView,
-    ListView,
-)
+from django.views.generic import DetailView
 from django.views.generic.edit import (
     CreateView,
     DeleteView,
     UpdateView,
 )
+from django_filters.views import FilterView
 
+from tasks.filters import TaskFilter
 from tasks.forms import TaskForm
 from tasks.models import Task
 
@@ -42,9 +41,10 @@ class TaskAuthorPermissionMixin(
 
 class TaskListView(
     LoginRequiredMixin,
-    ListView,
+    FilterView,
 ):
     model = Task
+    filterset_class = TaskFilter
     template_name = "tasks/index.html"
     context_object_name = "tasks"
 

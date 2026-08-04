@@ -8,6 +8,57 @@ from django.urls import reverse
 
 from statuses.models import Status
 
+STATUS_NEW = "\u041d\u043e\u0432\u044b\u0439"
+STATUS_IN_PROGRESS = (
+    "\u0412 \u0440\u0430\u0431\u043e\u0442\u0435"
+)
+STATUS_TESTING = (
+    "\u041d\u0430 "
+    "\u0442\u0435\u0441\u0442\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0438"
+)
+
+TEXT_STATUSES = (
+    "\u0421\u0442\u0430\u0442\u0443\u0441\u044b"
+)
+TEXT_CREATE_STATUS = (
+    "\u0421\u043e\u0437\u0434\u0430\u0442\u044c "
+    "\u0441\u0442\u0430\u0442\u0443\u0441"
+)
+TEXT_CREATE = (
+    "\u0421\u043e\u0437\u0434\u0430\u0442\u044c"
+)
+TEXT_UPDATE = (
+    "\u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c"
+)
+TEXT_DELETE = (
+    "\u0423\u0434\u0430\u043b\u0438\u0442\u044c"
+)
+TEXT_ALREADY_EXISTS = (
+    "\u0443\u0436\u0435 "
+    "\u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u0435\u0442"
+)
+
+MESSAGE_CREATED = (
+    "\u0421\u0442\u0430\u0442\u0443\u0441 "
+    "\u0443\u0441\u043f\u0435\u0448\u043d\u043e "
+    "\u0441\u043e\u0437\u0434\u0430\u043d"
+)
+MESSAGE_UPDATED = (
+    "\u0421\u0442\u0430\u0442\u0443\u0441 "
+    "\u0443\u0441\u043f\u0435\u0448\u043d\u043e "
+    "\u0438\u0437\u043c\u0435\u043d\u0435\u043d"
+)
+MESSAGE_DELETED = (
+    "\u0421\u0442\u0430\u0442\u0443\u0441 "
+    "\u0443\u0441\u043f\u0435\u0448\u043d\u043e "
+    "\u0443\u0434\u0430\u043b\u0435\u043d"
+)
+MESSAGE_PROTECTED = (
+    "\u041d\u0435\u0432\u043e\u0437\u043c\u043e\u0436\u043d\u043e "
+    "\u0443\u0434\u0430\u043b\u0438\u0442\u044c "
+    "\u0441\u0442\u0430\u0442\u0443\u0441"
+)
+
 
 class StatusViewsTest(TestCase):
     def setUp(self):
@@ -18,7 +69,7 @@ class StatusViewsTest(TestCase):
             password="password123",
         )
         self.status = Status.objects.create(
-            name="РќРѕРІС‹Р№",
+            name=STATUS_NEW,
         )
 
     @staticmethod
@@ -65,14 +116,26 @@ class StatusViewsTest(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "РЎС‚Р°С‚СѓСЃС‹")
-        self.assertContains(response, "РќРѕРІС‹Р№")
         self.assertContains(
             response,
-            "РЎРѕР·РґР°С‚СЊ СЃС‚Р°С‚СѓСЃ",
+            TEXT_STATUSES,
         )
-        self.assertContains(response, "Р�Р·РјРµРЅРёС‚СЊ")
-        self.assertContains(response, "РЈРґР°Р»РёС‚СЊ")
+        self.assertContains(
+            response,
+            STATUS_NEW,
+        )
+        self.assertContains(
+            response,
+            TEXT_CREATE_STATUS,
+        )
+        self.assertContains(
+            response,
+            TEXT_UPDATE,
+        )
+        self.assertContains(
+            response,
+            TEXT_DELETE,
+        )
 
     def test_status_create_page_field_names(self):
         self.client.force_login(self.user)
@@ -90,7 +153,10 @@ class StatusViewsTest(TestCase):
             response,
             'id="id_name"',
         )
-        self.assertContains(response, "РЎРѕР·РґР°С‚СЊ")
+        self.assertContains(
+            response,
+            TEXT_CREATE,
+        )
 
     def test_status_create(self):
         self.client.force_login(self.user)
@@ -98,7 +164,7 @@ class StatusViewsTest(TestCase):
         response = self.client.post(
             reverse("status_create"),
             {
-                "name": "Р’ СЂР°Р±РѕС‚Рµ",
+                "name": STATUS_IN_PROGRESS,
             },
         )
 
@@ -108,11 +174,11 @@ class StatusViewsTest(TestCase):
         )
         self.assertTrue(
             Status.objects.filter(
-                name="Р’ СЂР°Р±РѕС‚Рµ"
+                name=STATUS_IN_PROGRESS
             ).exists()
         )
         self.assertIn(
-            "РЎС‚Р°С‚СѓСЃ СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ",
+            MESSAGE_CREATED,
             self.get_message_texts(response),
         )
 
@@ -122,18 +188,18 @@ class StatusViewsTest(TestCase):
         response = self.client.post(
             reverse("status_create"),
             {
-                "name": "РќРѕРІС‹Р№",
+                "name": STATUS_NEW,
             },
         )
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(
             response,
-            "СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚",
+            TEXT_ALREADY_EXISTS,
         )
         self.assertEqual(
             Status.objects.filter(
-                name="РќРѕРІС‹Р№"
+                name=STATUS_NEW
             ).count(),
             1,
         )
@@ -147,7 +213,7 @@ class StatusViewsTest(TestCase):
                 args=[self.status.pk],
             ),
             {
-                "name": "РќР° С‚РµСЃС‚РёСЂРѕРІР°РЅРёРё",
+                "name": STATUS_TESTING,
             },
         )
 
@@ -160,10 +226,10 @@ class StatusViewsTest(TestCase):
 
         self.assertEqual(
             self.status.name,
-            "РќР° С‚РµСЃС‚РёСЂРѕРІР°РЅРёРё",
+            STATUS_TESTING,
         )
         self.assertIn(
-            "РЎС‚Р°С‚СѓСЃ СѓСЃРїРµС€РЅРѕ РёР·РјРµРЅРµРЅ",
+            MESSAGE_UPDATED,
             self.get_message_texts(response),
         )
 
@@ -189,7 +255,7 @@ class StatusViewsTest(TestCase):
             ).exists()
         )
         self.assertIn(
-            "РЎС‚Р°С‚СѓСЃ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅ",
+            MESSAGE_DELETED,
             self.get_message_texts(response),
         )
 
@@ -222,6 +288,6 @@ class StatusViewsTest(TestCase):
             ).exists()
         )
         self.assertIn(
-            "РќРµРІРѕР·РјРѕР¶РЅРѕ СѓРґР°Р»РёС‚СЊ СЃС‚Р°С‚СѓСЃ",
+            MESSAGE_PROTECTED,
             self.get_message_texts(response),
         )
