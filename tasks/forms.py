@@ -1,9 +1,23 @@
 from django import forms
+from django.contrib.auth import get_user_model
 
 from tasks.models import Task
 
+User = get_user_model()
+
+class UserChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, user):
+        full_name = user.get_full_name()
+
+        return full_name or user.username
 
 class TaskForm(forms.ModelForm):
+    executor = UserChoiceField(
+        queryset=User.objects.all(),
+        required=False,
+        label="Исполнитель",
+    )
+
     class Meta:
         model = Task
         fields = (
