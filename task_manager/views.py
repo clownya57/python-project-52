@@ -2,7 +2,6 @@ from django.conf import settings
 from django.http import HttpResponseForbidden
 from django.views.generic import TemplateView
 
-
 class IndexView(TemplateView):
     template_name = "index.html"
 
@@ -19,5 +18,6 @@ def rollbar_test(request):
         )
 
     raise RuntimeError(
-        "Rollbar production test error"
+        "Rollbar Django production test"
     )
+

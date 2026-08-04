@@ -176,11 +176,18 @@ ROLLBAR_ENVIRONMENT = os.getenv(
 ROLLBAR = {
     "access_token": ROLLBAR_ACCESS_TOKEN,
     "environment": ROLLBAR_ENVIRONMENT,
-    "branch": os.getenv(
-        "RENDER_GIT_BRANCH",
-        "main",
-    ),
     "root": str(BASE_DIR),
+    "scrub_fields": [
+        "password",
+        "secret",
+        "token",
+        "api_key",
+        "access_token",
+        "authorization",
+        "cookie",
+        "csrf_token",
+        "sessionid",
+    ],
 }
 
 if ROLLBAR_ACCESS_TOKEN:
