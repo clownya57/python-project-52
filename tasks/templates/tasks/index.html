@@ -94,7 +94,9 @@
             </td>
 
             <td>
-              {{ task.name }}
+              <a href="{% url 'task_show' task.pk %}">
+                {{ task.name }}
+              </a>
             </td>
 
             <td>
