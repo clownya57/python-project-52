@@ -44,4 +44,3 @@ urlpatterns = [
         admin.site.urls,
     ),
 ]
-
