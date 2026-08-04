@@ -8,3 +8,11 @@ __pycache__/
 staticfiles/
 .idea/
 .vscode/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+
+# SonarQube
+.scannerwork/
