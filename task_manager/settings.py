@@ -197,8 +197,3 @@ if ROLLBAR_ACCESS_TOKEN:
             "RollbarNotifierMiddleware"
         )
     )
-
-ROLLBAR_TEST_TOKEN = os.getenv(
-    "ROLLBAR_TEST_TOKEN",
-    "",
-)
