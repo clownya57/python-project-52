@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.urls import include, path
 
-from task_manager.views import IndexView
+from task_manager.views import (
+    IndexView,
+    rollbar_test,
+)
 from users.views import (
     UserLoginView,
     UserLogoutView,
@@ -12,6 +15,11 @@ urlpatterns = [
         "",
         IndexView.as_view(),
         name="index",
+    ),
+    path(
+        "rollbar-test/",
+        rollbar_test,
+        name="rollbar_test",
     ),
     path(
         "users/",

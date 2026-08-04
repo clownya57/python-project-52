@@ -162,3 +162,36 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "index"
 
 LOGOUT_REDIRECT_URL = "index"
+
+ROLLBAR_ACCESS_TOKEN = os.getenv(
+    "ROLLBAR_ACCESS_TOKEN",
+    "",
+)
+
+ROLLBAR_ENVIRONMENT = os.getenv(
+    "ROLLBAR_ENVIRONMENT",
+    "development" if DEBUG else "production",
+)
+
+ROLLBAR = {
+    "access_token": ROLLBAR_ACCESS_TOKEN,
+    "environment": ROLLBAR_ENVIRONMENT,
+    "branch": os.getenv(
+        "RENDER_GIT_BRANCH",
+        "main",
+    ),
+    "root": str(BASE_DIR),
+}
+
+if ROLLBAR_ACCESS_TOKEN:
+    MIDDLEWARE.append(
+        (
+            "rollbar.contrib.django.middleware."
+            "RollbarNotifierMiddleware"
+        )
+    )
+
+ROLLBAR_TEST_TOKEN = os.getenv(
+    "ROLLBAR_TEST_TOKEN",
+    "",
+)
